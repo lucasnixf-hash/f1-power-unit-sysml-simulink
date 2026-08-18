@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net">
+  <diagram name="第 1 页" id="9IT1Q5A2u3euXySbfwJJ">
+    <mxGraphModel dx="1285" dy="746" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="frame_stm" parent="1" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;width=240;height=35;fontStyle=1;" value="stm [StateMachine] ICE_STM" vertex="1">
+          <mxGeometry height="680" width="920" x="40" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="state_initial" parent="1" style="shape=ellipse;fillColor=#000000;strokeColor=none;html=1;" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="90" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="state_standby" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fontStyle=1;" value="Off_Standby" vertex="1">
+          <mxGeometry height="60" width="140" x="180" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="state_cranking" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fontStyle=1;" value="Cranking" vertex="1">
+          <mxGeometry height="60" width="140" x="400" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="state_idle" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fontStyle=1;" value="Idle" vertex="1">
+          <mxGeometry height="60" width="140" x="640" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="state_running" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fontStyle=1;" value="Running" vertex="1">
+          <mxGeometry height="60" width="140" x="640" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="state_fuelcut" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fontStyle=1;" value="Fuel_Cut&#xa;(Lift &amp; Coast)" vertex="1">
+          <mxGeometry height="60" width="140" x="380" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="state_limp" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fontStyle=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="Limp_Home" vertex="1">
+          <mxGeometry height="60" width="140" x="640" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="state_failsafe" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fontStyle=1;fillColor=#f8cecc;strokeColor=#b85450;" value="Fail_Safe" vertex="1">
+          <mxGeometry height="60" width="140" x="180" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="trans_init" edge="1" parent="1" source="state_initial" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" target="state_standby">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="trans_start" edge="1" parent="1" source="state_standby" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontFamily=Helvetica;fontSize=10;verticalAlign=bottom;" target="state_cranking" value="start_cmd == true">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="trans_crank" edge="1" parent="1" source="state_cranking" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontFamily=Helvetica;fontSize=10;verticalAlign=bottom;" target="state_idle" value="rpm &gt; idle_threshold">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="trans_accel" edge="1" parent="1" source="state_idle" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontFamily=Helvetica;fontSize=10;verticalAlign=bottom;" target="state_running" value="throttle_pct &gt; 5">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="740" y="240" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="trans_decel" edge="1" parent="1" source="state_running" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontFamily=Helvetica;fontSize=10;verticalAlign=bottom;" target="state_idle" value="throttle_pct &lt;= 5">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="680" y="240" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="trans_coast" edge="1" parent="1" source="state_running" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontFamily=Helvetica;fontSize=10;verticalAlign=bottom;" target="state_fuelcut" value="strategy == Lift_and_Coast">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="580" y="330" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="trans_reaccel" edge="1" parent="1" source="state_fuelcut" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontFamily=Helvetica;fontSize=10;verticalAlign=bottom;" target="state_running" value="throttle_pct &gt; 0">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="580" y="370" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="trans_idle_ret" edge="1" parent="1" source="state_fuelcut" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontFamily=Helvetica;fontSize=10;verticalAlign=bottom;" target="state_idle" value="rpm &lt; fuel_cut_rpm">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="450" y="240" />
+              <mxPoint x="650" y="240" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="trans_limp" edge="1" parent="1" source="state_running" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontFamily=Helvetica;fontSize=10;verticalAlign=bottom;" target="state_limp" value="minor_fault_flag == true">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="trans_failsafe1" edge="1" parent="1" source="state_limp" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontFamily=Helvetica;fontSize=10;verticalAlign=bottom;" target="state_failsafe" value="ice_fail_safe == true">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="trans_failsafe2" edge="1" parent="1" source="state_running" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontFamily=Helvetica;fontSize=10;verticalAlign=bottom;" target="state_failsafe" value="critical_fault == true">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="750" y="470" />
+              <mxPoint x="250" y="470" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
